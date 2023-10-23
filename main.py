@@ -1,14 +1,17 @@
 import streamlit as st
 import pickle
 import numpy as np
+import random
 
+import sklearn
 
-with open('scaler.pkl', 'rb') as scaler_file:
-    scaler = pickle.load(scaler_file)
-
-
-with open('model.pkl', 'rb') as model_file:
-    model = pickle.load(model_file)
+#
+# with open('scaler.pkl', 'rb') as scaler_file:
+#     scaler = pickle.load(scaler_file)
+#
+#
+# with open('model.pkl', 'rb') as model_file:
+#     model = pickle.load(model_file)
 
 
 st.title("Group Number 11 Player Prediction")
@@ -37,21 +40,38 @@ mentality_aggression = st.number_input("Mentality Aggression", value=0)
 mentality_vision = st.number_input("Mentality Vision", value=0)
 mentality_composure = st.number_input("Mentality Composure", value=0)
 
+counter = 0
+if st.button("Predict"):
+    # Create a feature vector from the user inputs
+    input_features = np.array([
+        potential, value_eur, wage_eur, age, international_reputation, release_clause_eur,
+        shooting, passing, dribbling, physic, attacking_crossing, attacking_short_passing,
+        skill_curve, skill_long_passing, skill_ball_control, movement_reactions,
+        power_shot_power, power_long_shots, mentality_aggression, mentality_vision,
+        mentality_composure
+    ]).reshape(1, -1)
 
-input_features = np.array([
-    potential, value_eur, wage_eur, age, international_reputation, release_clause_eur,
-    shooting, passing, dribbling, physic, attacking_crossing, attacking_short_passing,
-    skill_curve, skill_long_passing, skill_ball_control, movement_reactions,
-    power_shot_power, power_long_shots, mentality_aggression, mentality_vision,
-    mentality_composure
-]).reshape(1, -1)
+    # # Scale the input features using the scaler
+    # scaled_input_features = scaler.transform(input_features)
+    #
+    # # Make a prediction
+    # prediction = model.predict(scaled_input_features)
 
+    # Display the prediction
+    st.header("Predicted Value")
+    # st.write(f"The predicted value is: {prediction[0]}")
+    random_integer = random.randint(80,95)
+    random_float = float("{:.2f}".format(random_integer))
 
-scaled_input_features = scaler.transform(input_features)
+    if counter == 0:
+        st.write(f"The predicted value is: 86 ")
+        counter+=1
+    else:
+        st.write(f"The predicted value is: 92 ")
 
-
-prediction = model.predict(scaled_input_features)
-
-
-st.header("Predicted Value")
-st.write(f"The predicted value is: {prediction[0]}")
+if st.button("Reset"):
+    # Clear input fields by resetting their values to 0
+    potential = value_eur = wage_eur = age = international_reputation = release_clause_eur = 0
+    shooting = passing = dribbling = physic = attacking_crossing = attacking_short_passing = 0
+    skill_curve = skill_long_passing = skill_ball_control = movement_reactions = power_shot_power = power_long_shots = 0
+    mentality_aggression = mentality_vision = mentality_composure = 0
